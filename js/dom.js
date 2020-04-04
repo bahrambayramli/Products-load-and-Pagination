@@ -1,12 +1,12 @@
 let KeyValues = {
     text: "innerText",
-    html: "innerHtml",
+    html: "innerHTML",
     val: "value",
     cls: "className",
     clsList: "classList"
 }
 let dom = {
-    createEelement: function(elementName, elementProperties) {
+    createElement: function(elementName, elementProperties) {
 
         let element = document.createElement(elementName);
         for (let prop in elementProperties) {
@@ -14,6 +14,14 @@ let dom = {
             element[value] = elementProperties[prop];
         }
         return element;
+    },
+    appendChild: function(element, to) {
+        to.appendChild(element);
+    },
+    appendMultiple: function(elements, to) {
+        for (let element of elements) {
+            this.appendChild(element, to);
+        }
     }
 }
 

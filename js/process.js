@@ -5,20 +5,11 @@ function ProductComponent(data) {
     this._data = data;
     this._dataclass = "col-md-3";
     this.GenerateData = function() {
-        let wrapper = dom.createEelement("div", { cls: this._dataclass });
-        let img = document.createElement("img");
-        img.src = this._data.photo;
-
-        let p1 = document.createElement("p");
-        p1.innerHTML = `<strong>${this._data.model}</strong> `;
-        p1.innerHTML += `<em style='color:red'>${this._data.marka}</em>`;
-
-        let p2 = document.createElement("p");
-        p2.innerHTML = `<em>${this._data.id}</em>---<strong>${this._data.price}</strong>`;
-
-        wrapper.appendChild(img);
-        wrapper.appendChild(p1);
-        wrapper.appendChild(p2);
+        let wrapper = dom.createElement("div", { cls: this._dataclass });
+        let img = dom.createElement("img", { src: this._data.photo })
+        let p1 = dom.createElement("p", { html: `<strong>${this._data.model}</strong> <em style='color:red'>${this._data.marka}</em>` });
+        let p2 = dom.createElement("p", { html: `<em>${this._data.id}</em>---<strong>${this._data.price}</strong>` });
+        dom.appendMultiple([img, p1, p2], wrapper);
         return wrapper;
     };
 }
@@ -57,7 +48,7 @@ let productLoader = {
         document.getElementById(id).appendChild(pagingWrapper);
     },
 };
-console.log(dom.createEelement("div", { innerText: "hello" }));
+console.log(dom.createElement("div", { innerText: "hello" }));
 productLoader.constructor("dataContainer");
 productLoader.LoadTo(1, 8);
 productLoader.GeneratePaging("pagination");

@@ -22,6 +22,12 @@ let dom = {
         for (let element of elements) {
             this.appendChild(element, to);
         }
+    },
+    getbyId: function(id) {
+        return document.getElementById(id);
+    },
+    clearById: function(id) {
+        document.getElementById(id).innerHTML = "";
     }
 }
 

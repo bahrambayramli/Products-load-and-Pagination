@@ -1,5 +1,6 @@
 import { products } from "./product.js";
 import { dom } from "./dom.js";
+import { isNou } from "./common.js";
 
 function ProductComponent(data) {
     this._data = data;
@@ -14,21 +15,29 @@ function ProductComponent(data) {
     };
 }
 
+function ElementsMaker(pageNum, count, id) {
+    this.container = dom.getbyId(id)
+    let from = (pageNum - 1) * count;
+    let to = pageNum * count;
+    this.RenderElements = function() {
+        for (let i = from; i < to; i++) {
+            let component = new ProductComponent(products[i]).GenerateData();
+            dom.appendChild(component, this.container)
+        }
+    };
+}
+
 let productLoader = {
     _itemsPerPage: 8,
     _id: null,
     constructor: function(id) {
         this._id = id;
     },
-    LoadTo: function(Page, count) {
-        if (count == undefined || count == null) count = this._itemsPerPage;
-        let container = document.getElementById(this._id);
-        let from = (Page - 1) * count;
-        let to = Page * count;
-        for (let i = from; i < to; i++) {
-            let component = new ProductComponent(products[i]).GenerateData();
-            container.appendChild(component);
-        }
+    LoadTo: function(PageNumber, count) {
+        if (!isNou(count)) count = this._itemsPerPage;
+        let elMaker = new ElementsMaker(PageNumber, count, this._id);
+        elMaker.RenderElements();
+
     },
     GeneratePaging: function(id) {
         let itemsCount = products.length;
@@ -36,16 +45,16 @@ let productLoader = {
         let pagingWrapper = document.createElement("div");
         pagingWrapper.className = "col-12";
         for (let i = 1; i < paging; i++) {
-            let button = document.createElement("button");
-            button.innerText = i;
-            button.className = "btn btn-primary mx-1 my-2";
+            let button = dom.createElement("button", { innerText: i, cls: "btn btn-success" });
             button.addEventListener("click", () => {
-                document.getElementById(this._id).innerHTML = "";
+                dom.clearById(this._id);
                 productLoader.LoadTo(parseInt(button.innerText));
             });
-            pagingWrapper.appendChild(button);
+            //pagingWrapper.appendChild(button);
+            dom.appendChild(button, pagingWrapper)
         }
         document.getElementById(id).appendChild(pagingWrapper);
+        dom.appendChild(pagingWrapper, dom.getbyId(id))
     },
 };
 console.log(dom.createElement("div", { innerText: "hello" }));
